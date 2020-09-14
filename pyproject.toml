@@ -1,0 +1,6 @@
+[build-system]
+requires = [            
+    "Cython",
+    "setuptools>=40.8.0",
+    "numpy"
+]

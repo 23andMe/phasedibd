@@ -1,0 +1,20 @@
+build/
+dist/
+*.swp
+*.pyc
+*.c
+*.so
+*.html
+*.egg-info
+*.idea
+
+# Service dependencies
+venv
+.mypy_cache
+.tox
+
+**.eggs
+.vscode
+.devcontainer
+
+.DS_Store
