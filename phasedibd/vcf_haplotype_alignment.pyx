@@ -66,11 +66,11 @@ cdef class VcfHaplotypeAlignment(HaplotypeAlignment):
                 self.header_length += 1
                 word = strtok(line, vcf_delimiter)
                 word_num = 0
-                current_sample = 0
                 while word != NULL:
                     if word.decode() == 'FORMAT':
                         setting_sample_names = True
                         self.sample_start = word_num + 1
+                        current_sample = 0
                     elif setting_sample_names:
                         # get sample names
                         #sample_names.append(word.decode().rstrip())
@@ -129,8 +129,9 @@ cdef class VcfHaplotypeAlignment(HaplotypeAlignment):
             self.chromo_genetic_position = np.asarray(self.physical_positions)/1000000.0
         else:
             # read PLINK format genetic map file setting physical and genetic positions
-            m = pd.read_table(self.map_file, header=None, names=['chromo','id','cm','bp'], sep=' ')
-            if (np.array(m['bp']) != np.array(self.physical_positions)).any():
+            m = pd.read_csv(self.map_file, header=None, names=['chromo','id','cm','bp'], sep=' ')
+            if np.array(m['bp']).shape != np.array(self.physical_positions).shape or \
+                    (np.array(m['bp']) != np.array(self.physical_positions)).any():
                 raise Exception('The sites in the VCF do not match the sites in the genetic map.')
             self.chromo_genetic_position = np.array(m['cm'])
 
