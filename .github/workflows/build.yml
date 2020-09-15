@@ -1,6 +1,6 @@
 # This workflow will install Python dependencies, compile the Cython code, and run unit tests 
 
-name: Install and test
+name: build
 
 on:
   push:
