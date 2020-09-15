@@ -1,7 +1,11 @@
 # phasedibd
 ## templated positional Burrows-Wheeler transform
 
-`phasedibd` is a Python package developed by the 23andMe Ancestry Research team to compute phase aware IBD using the templated positional Burrows-Wheeler transform (TPBWT).
+
+![build](https://github.com/23andMe/phasedibd/workflows/build/badge.svg)
+
+`phasedibd` is a Python package developed by the 23andMe Ancestry Research team to compute phase aware identity-by-descent (IBD) 
+using the templated positional Burrows-Wheeler transform (TPBWT).
 See [here](https://bitbucket.research.23andme.net/) for the manuscript describing the algorithm, its parameter options, and its performance in detail.
 
 **contact:** Will Freyman <willf@23andme.com>
