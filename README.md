@@ -1,4 +1,4 @@
-# phasedibd
+# 23andMe/phasedibd
 ## templated positional Burrows-Wheeler transform
 
 
@@ -79,22 +79,22 @@ For in-sample analyses `id1` < `id2`. For out-of-sample analyses `id1` is always
 
 ## To run a basic in-sample IBD analysis on VCF files:
 
-Import the module:
+First import the module:
 ```
 import phasedibd as ibd
 ```
-Create an object to hold the haplotype alignment. This parses the VCF file.
-It expects a VCF file with a diploid GT field. In case of haploid data, the GT field must be
+Now create an object to hold the haplotype alignment. This object parses the VCF file;
+it expects a VCF file with a diploid GT field. In case of haploid data, the GT field must be
 transformed to a pseudo-diploid field (such as 0 -> 0|0).
 Additionally, the sites in the VCF file must be sorted by physical position.
 There should be one VCF file per chromosome.
 ```
 haplotypes = ibd.VcfHaplotypeAlignment('chr22_sorted.vcf')
 ```
-Now we actually perform the IBD analysis; 
+Next we perform the IBD analysis -- 
 instantiate an object of class `TPBWTAnalysis` and call
 its method `compute_ibd()`. 
-This method has many options for performing different types of analyses.
+This method has many options (described above) for performing different types of analyses.
 The default output is a pandas `DataFrame` with all the IBD segments.
 ```
 tpbwt = ibd.TPBWTAnalysis()
@@ -119,18 +119,39 @@ If no genetic map is used then the physical positions in the VCF file will be co
 Runs an IBD analysis between two sets of haplotypes:
 ```
 import phasedibd as ibd
-haplotypes_a = ibd.VcfHaplotypeAlignment('a_chr1.vcf')
-haplotypes_b = ibd.VcfHaplotypeAlignment('b_chr1.vcf')
+haplotypes_a = ibd.VcfHaplotypeAlignment('a_chr1.vcf', 'chr1_genetic_map.map')
+haplotypes_b = ibd.VcfHaplotypeAlignment('b_chr1.vcf', 'chr1_genetic_map.map')
 tpbwt = ibd.TPBWTAnalysis()
 ibd_results = tpbwt.compute_ibd(haplotypes_a, haplotypes_b)
 ```
-The output is a pandas DataFrame with only the IBD segments shared between the two sets of haplotypes. It does not include any IBD shared within the same alignment object.
+The output is a pandas DataFrame with only the IBD segments shared between the two sets of haplotypes. 
+It does not include any IBD shared within the same alignment object.
+
+## Generating TPBWT-compressed haplotypes:
+
+TPBWT-compressed haplotypes are stored in the `.tpbwt` binary file format. 
+TPBWT-compressed haplotypes are useful for fast and efficient out-of-sample IBD computes against very large cohort panels.
+
+To TPBWT-compress the haplotypes, set up the haplotypes just like above but now pass them into the `compress_alignment()` method:
+```
+haplotypes = ibd.VcfHaplotypeAlignment('chr1_sorted.vcf', 'chr1_genetic_map.map')
+tpbwt.compress_alignment('compressed_haplotypes/', haplotypes)
+```
+This will generate files for each chromosome (`1.tpbwt`, `2.tpbwt`, …, `X.tpbwt`) in the directory `compressed_haplotypes/`.
+
+To combine two haplotype alignments into a larger TPBWT-compressed haplotype:
+```
+tpbwt.compress_alignment('combined_compressed_haplotypes/', 
+    haplotypes_1, haplotypes_2)
+```
 
 ## Generating TPBWT-compressed haplotypes while simultaneously computing IBD:
 
-Set up the IBD compute just like above, but use the `compressed_out_path` argument:
+The `compress_alignment()` method described above is the most memory efficient way to TPBWT-compress haplotypes.
+However, it is also possible to simultaneously TPBWT-compress haplotypes and compute IBD.
+Set up an IBD compute just like above but use the `compressed_out_path` argument:
 ```
-haplotypes = ibd.VcfHaplotypeAlignment('1.10000.sorted.vcf', 'genetic_map.map')
+haplotypes = ibd.VcfHaplotypeAlignment('chr1_sorted.vcf', 'chr1_genetic_map.map')
 ibd_segs = tpbwt.compute_ibd(haplotypes, compressed_out_path=’compressed_haplotypes/’)
 ```
 During the IBD compute this will generate files for each chromosome (`1.tpbwt`, `2.tpbwt`, …, `X.tpbwt`) in the directory `compressed_haplotypes/`.
@@ -141,19 +162,6 @@ To combine two haplotype alignments into a larger TPBWT-compressed haplotype:
 ```
 ibd_segs = tpbwt.compute_ibd(haplotypes_1, haplotypes_2, 
     compressed_out_path=’combined_compressed_haplos/’)
-```
-
-## Generating TPBWT-compressed haplotypes in a more memory efficient way:
-
-For very large haplotype alignments, it is more memory efficient to TPBWT-compress the 
-haplotypes without simultaneously computing IBD.
-```
-tpbwt.compress_alignment('compressed_haplotypes/', haplotypes)
-```
-To combine two haplotype alignments into a larger TPBWT-compressed haplotype:
-```
-tpbwt.compress_alignment('combined_compressed_haplotypes/', 
-    haplotypes_1, haplotypes_2)
 ```
 
 ## Using TPBWT-compressed haplotypes:
