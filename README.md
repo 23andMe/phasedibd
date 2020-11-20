@@ -6,7 +6,7 @@
 
 `phasedibd` is a Python package developed by the 23andMe Ancestry Research team to compute phase aware identity-by-descent (IBD) 
 using the templated positional Burrows-Wheeler transform (TPBWT).
-See [here](https://bitbucket.research.23andme.net/) for the manuscript describing the algorithm, its parameter options, and its performance in detail.
+See [here](https://www.biorxiv.org/content/10.1101/2020.09.14.296939v1) for our manuscript describing the algorithm, its parameter options, and its performance in detail.
 
 **contact:** Will Freyman <willf@23andme.com>
 
