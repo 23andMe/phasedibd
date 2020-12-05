@@ -29,8 +29,8 @@ class TestPbwtBasics(unittest.TestCase):
                                   'id2_haplotype': [0,0,0]})
         #print(ibd_segs)
         #print(true_segs)
-        self.assertTrue(np.all(ibd_segs.eq(true_segs)))
-    
+        #self.assertTrue(np.all(ibd_segs.eq(true_segs)))
+        self.assertTrue(np.array_equal(ibd_segs,true_segs))
     
     def test_vcf_no_map(self):
         print("\nTesting IBD compute over VCF file with out genetic map...")
