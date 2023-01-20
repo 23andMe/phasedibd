@@ -507,26 +507,25 @@ cdef class TPBWT:
                         # reached break in reportable matches so output current set of valid matches
                         end = last_site
                         if compute_ibd and end > div[t][i] and end - div[t][i] < L_m:
-                            if num_matches_end_0 > 0 and num_matches_end_1 > 0 and i > (num_matches_end_0 + num_matches_end_1):
-                                for u in xrange(i - (num_matches_end_0 + num_matches_end_1), i):
-                                    start = 0
-                                    for y in xrange(u + 1, i):
-                                        if div[t][y] > start:
-                                            start = div[t][y]
-                                        match_long_enough = end > start and end - start >= L_m
-                                        if match_long_enough:
-                                            if alleles[u] != alleles[y]:
-                                                out_of_sample_match = False
-                                                if not in_sample_analysis:
-                                                    out_of_sample_match = (((ppa[t][u] < num_all_x_haplotypes) and \
-                                                                            (ppa[t][y] >= num_all_x_haplotypes)) or \
-                                                                           ((ppa[t][y] < num_all_x_haplotypes) and \
-                                                                            (ppa[t][u] >= num_all_x_haplotypes)))
-                                                if in_sample_analysis or out_of_sample_match:
-                                                    self.report_templated_segment(ppa[t][u], ppa[t][y], 
-                                                            start, end, L_m, L_f, use_phase_correction)
-                                        else:
-                                            break
+                            for u in xrange(i - (num_matches_end_0 + num_matches_end_1), i):
+                                start = 0
+                                for y in xrange(u + 1, i):
+                                    if div[t][y] > start:
+                                        start = div[t][y]
+                                    match_long_enough = end > start and end - start >= L_m
+                                    if match_long_enough:
+                                        if alleles[u] != alleles[y]:
+                                            out_of_sample_match = False
+                                            if not in_sample_analysis:
+                                                out_of_sample_match = (((ppa[t][u] < num_all_x_haplotypes) and \
+                                                                        (ppa[t][y] >= num_all_x_haplotypes)) or \
+                                                                       ((ppa[t][y] < num_all_x_haplotypes) and \
+                                                                        (ppa[t][u] >= num_all_x_haplotypes)))
+                                            if in_sample_analysis or out_of_sample_match:
+                                                self.report_templated_segment(ppa[t][u], ppa[t][y], 
+                                                        start, end, L_m, L_f, use_phase_correction)
+                                    else:
+                                        break
                             num_matches_end_0 = 0
                             num_matches_end_1 = 0
                         
@@ -675,7 +674,7 @@ cdef class TPBWT:
                             start_1 = 0
 
                     # for matches within the last block of haplotypes
-                    if compute_ibd and num_matches_end_0 > 0 and num_matches_end_1 > 0 and i > (num_matches_end_0 + num_matches_end_1):
+                    if compute_ibd:
                         end = last_site
                         for u in xrange(i - (num_matches_end_0 + num_matches_end_1), i):
                             start = 0
