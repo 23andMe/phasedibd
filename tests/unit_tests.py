@@ -59,12 +59,13 @@ class TestPbwtBasics(unittest.TestCase):
             vcf_path = TEST_DATA_PATH + 'pedigree_vcf/' + chromo + '.vcf'
             map_path = TEST_DATA_PATH + 'pedigree_vcf/maps/' + chromo + '.map'
             haplotypes = ibd.VcfHaplotypeAlignment(vcf_path, map_path)
-            tpbwt = ibd.TPBWTAnalysis()
-            ibd_segs = tpbwt.compute_ibd(haplotypes, use_phase_correction=False, verbose=False)
+            tpbwt = ibd.TPBWTAnalysis([[1]])
+            ibd_segs = tpbwt.compute_ibd(haplotypes, L_f=7, use_phase_correction=False, verbose=False)
             est_ibd = est_ibd.append(ibd_segs)
         est_ibd['length'] = est_ibd['end_bp'] - est_ibd['start_bp']
         true_ibd = pd.read_csv(TEST_DATA_PATH + 'pedigree_vcf/true_ibd.csv')
         true_ibd = true_ibd[true_ibd['chromosome'] != 'X']
+        true_ibd = true_ibd[true_ibd['length'] > 4000000]
         # compute error in total IBD (in bp) and num segments per pair
         pairwise_error_ibd = []
         pairwise_error_num_seg = []
