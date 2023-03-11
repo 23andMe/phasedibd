@@ -10,19 +10,27 @@ cdef class HaplotypeAlignment:
     Contains test data.
     """
 
-    def __init__(self):
+    def __init__(self, haplotypes=None, chromosomes=None):
          
-        self.chromosomes = ['1']
-        self.current_chromosome = ''
-        self.haplotypes = [[0, 1, 0, 1, 0, 1],
-                           [1, 1, 2, 0, 0, 1],  # 2 represents missing/invalid allele
-                           [1, 1, 1, 1, 1, 1],
-                           [0, 1, 1, 1, 1, 0],
-                           [0, 0, 0, 0, 0, 0],
-                           [1, 0, 0, 0, 1, 0],
-                           [1, 1, 0, 0, 0, 1],
-                           [0, 1, 0, 1, 1, 0]]
+        if haplotypes is None:
+            self.haplotypes = [[0, 1, 0, 1, 0, 1],
+                            [1, 1, 2, 0, 0, 1],  # 2 represents missing/invalid allele
+                            [1, 1, 1, 1, 1, 1],
+                            [0, 1, 1, 1, 1, 0],
+                            [0, 0, 0, 0, 0, 0],
+                            [1, 0, 0, 0, 1, 0],
+                            [1, 1, 0, 0, 0, 1],
+                            [0, 1, 0, 1, 1, 0]]
+        else:
+            self.haplotypes = haplotypes
+        
+        if chromosomes is None:
+            self.chromosomes = ['1']
+        else:
+            self.chromosomes = chromosomes
 
+        self.current_chromosome = ''
+        
         self.num_all_haplotypes = len(self.haplotypes)
         self.num_active_haplotypes = len(self.haplotypes)
         self.num_sites = len(self.haplotypes[0])
