@@ -30,6 +30,35 @@ class TestPbwtBasics(unittest.TestCase):
         #print(ibd_segs)
         #print(true_segs)
         self.assertTrue(np.all(ibd_segs.eq(true_segs)))
+
+    def test_PBWT_default_haplotypes_np_array_input(self):
+        print("\nTesting non-templated PBWT matches over default haplotypes...")
+        haplotype_array = np.array([[0, 1, 0, 1, 0, 1],
+                            [1, 1, 2, 0, 0, 1],  # 2 represents missing/invalid allele
+                            [1, 1, 1, 1, 1, 1],
+                            [0, 1, 1, 1, 1, 0],
+                            [0, 0, 0, 0, 0, 0],
+                            [1, 0, 0, 0, 1, 0],
+                            [1, 1, 0, 0, 0, 1],
+                            [0, 1, 0, 1, 1, 0]])
+
+        haplotypes = ibd.HaplotypeAlignment(haplotype_array=haplotype_array)
+        tpbwt = ibd.TPBWTAnalysis(template=[[1]])
+        ibd_segs = tpbwt.compute_ibd(haplotypes, L_m=3, L_f=0, missing_site_threshold=1, verbose=False)
+        true_segs = pd.DataFrame({'chromosome': ['1'] * 3,
+                                  'start': [0,0,1],
+                                  'end': [3,5,4],
+                                  'start_cm': [0,0,1],
+                                  'end_cm': [3,5,4],
+                                  'start_bp': [0,0,1],
+                                  'end_bp': [3,5,4],
+                                  'id1': [0,1,2],
+                                  'id2': [7,6,3],
+                                  'id1_haplotype': [0,0,0],
+                                  'id2_haplotype': [0,0,0]})
+        #print(ibd_segs)
+        #print(true_segs)
+        self.assertTrue(np.all(ibd_segs.eq(true_segs)))
     
     
     def test_vcf_no_map(self):
