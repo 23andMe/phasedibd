@@ -10,9 +10,10 @@ cdef class HaplotypeAlignment:
     Contains test data.
     """
 
-    def __init__(self, haplotypes=None, chromosomes=None):
+    def __init__(self, haplotype_array=None, chromosomes=None):
          
-        if haplotypes is None:
+        if haplotype_array is None:
+            # use test data 
             self.haplotypes = [[0, 1, 0, 1, 0, 1],
                             [1, 1, 2, 0, 0, 1],  # 2 represents missing/invalid allele
                             [1, 1, 1, 1, 1, 1],
@@ -22,7 +23,7 @@ cdef class HaplotypeAlignment:
                             [1, 1, 0, 0, 0, 1],
                             [0, 1, 0, 1, 1, 0]]
         else:
-            self.haplotypes = haplotypes
+            self.haplotypes = haplotype_array
         
         if chromosomes is None:
             self.chromosomes = ['1']
