@@ -1,8 +1,8 @@
 
 from libc.stdio cimport *
-from haplotype_alignment cimport HaplotypeAlignment
-from compressed_haplotype_alignment cimport CompressedHaplotypeAlignment
-from vcf_haplotype_alignment cimport VcfHaplotypeAlignment
+from .haplotype_alignment cimport HaplotypeAlignment
+from .compressed_haplotype_alignment cimport CompressedHaplotypeAlignment
+from .vcf_haplotype_alignment cimport VcfHaplotypeAlignment
 from libc.stdint cimport uint8_t, uint16_t, uint32_t, uint64_t
 
 

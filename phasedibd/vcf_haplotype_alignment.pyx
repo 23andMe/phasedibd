@@ -1,7 +1,7 @@
 # cython: profile=True
 
 from libc.stdlib cimport malloc, free
-from haplotype_alignment cimport HaplotypeAlignment
+from .haplotype_alignment cimport HaplotypeAlignment
 import numpy as np
 cimport numpy as np
 import pandas as pd

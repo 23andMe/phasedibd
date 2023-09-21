@@ -90,7 +90,7 @@ cdef class TPBWT:
         free(self.segments_end_bp)
         cdef uint32_t num_cols
         if self.current_matches_start != NULL:
-            num_cols = sizeof(self.current_matches_start)/sizeof(self.current_matches_start[0])
+            num_cols = sizeof(self.current_matches_start)//sizeof(self.current_matches_start[0])
             for i in xrange(num_cols):
                 free(self.current_matches_start[i])
                 free(self.current_matches_end[i])
@@ -162,7 +162,7 @@ cdef class TPBWT:
 
         # first free any already allocated memory
         if self.current_matches_start != NULL:
-            num_rows = sizeof(self.current_matches_start)/sizeof(self.current_matches_start[0])
+            num_rows = sizeof(self.current_matches_start)//sizeof(self.current_matches_start[0])
             for i in xrange(num_rows):
                 free(self.current_matches_start[i])
                 free(self.current_matches_end[i])

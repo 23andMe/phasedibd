@@ -26,6 +26,6 @@ setup(
     packages=[name],
     include_package_data=True,
     url='https://github.com/23andme/' + name,
-    ext_modules=cythonize([Extension('phasedibd.*', ['phasedibd/*.pyx'], include_dirs=[np.get_include()])]),
+    ext_modules=cythonize([Extension('phasedibd.*', ['phasedibd/*.pyx'], include_dirs=[np.get_include()])], language_level="3"),
     include_dirs=[np.get_include()]
 )
