@@ -1,6 +1,6 @@
 from libc.stdint cimport uint8_t, uint16_t, uint32_t
 from libc.stdio cimport *
-from haplotype_alignment cimport HaplotypeAlignment
+from .haplotype_alignment cimport HaplotypeAlignment
 
 
 cdef class CompressedHaplotypeAlignment(HaplotypeAlignment):
