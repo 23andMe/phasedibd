@@ -19,8 +19,7 @@ See [here](https://www.biorxiv.org/content/10.1101/2020.09.14.296939v1) for our 
 After cloning the repo you'll need to compile it. First `cd phasedibd` and then
 ```
 make
-python setup.py install 
-python tests/unit_tests.py
+make test
 ```
 Now in Python you can import the module:
 ```
