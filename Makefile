@@ -6,7 +6,7 @@ all:
 install:
 	pip install -e .
 
-test:
+test: install
 	python tests/unit_tests.py
 
 clean::

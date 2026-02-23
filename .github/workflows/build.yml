@@ -14,18 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.11]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Needed for setuptools-scm to get version from git
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install Cython numpy pandas
+        pip install Cython numpy pandas setuptools-scm
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Compile 
       run: |
