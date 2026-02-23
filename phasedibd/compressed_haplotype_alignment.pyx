@@ -1,10 +1,12 @@
 # cython: profile=True
+# distutils: define_macros=NPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION
 
 from libc.stdlib cimport malloc, free
 import numpy as np
 cimport numpy as np
 from os import listdir
 import pandas as pd
+from phasedibd.haplotype_alignment cimport HaplotypeAlignment
 
 
 

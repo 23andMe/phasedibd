@@ -53,7 +53,7 @@ class TestPbwtBasics(unittest.TestCase):
 
     def test_pedigree_simulated_vcf(self):
         print("\nTesting simulated in-sample IBD compute: closely related samples in VCF simulated from 1KGP 4 generation pedigree...")
-        est_ibd = pd.DataFrame()
+        est_ibd_list = []
         chromosomes = [str(x) for x in range(1, 23)]
         for chromo in chromosomes:
             vcf_path = TEST_DATA_PATH + 'pedigree_vcf/' + chromo + '.vcf'
@@ -61,7 +61,8 @@ class TestPbwtBasics(unittest.TestCase):
             haplotypes = ibd.VcfHaplotypeAlignment(vcf_path, map_path)
             tpbwt = ibd.TPBWTAnalysis([[1]])
             ibd_segs = tpbwt.compute_ibd(haplotypes, L_f=7, use_phase_correction=False, verbose=False)
-            est_ibd = est_ibd.append(ibd_segs)
+            est_ibd_list.append(ibd_segs)
+        est_ibd = pd.concat(est_ibd_list, ignore_index=True)
         est_ibd['length'] = est_ibd['end_bp'] - est_ibd['start_bp']
         true_ibd = pd.read_csv(TEST_DATA_PATH + 'pedigree_vcf/true_ibd.csv')
         true_ibd = true_ibd[true_ibd['chromosome'] != 'X']
@@ -93,14 +94,15 @@ class TestPbwtBasics(unittest.TestCase):
 
     def test_1kgp_vcf(self):
         print("\nTesting 1KGP in-sample IBD compute: distantly related samples in VCF...")
-        ibd_results = pd.DataFrame()
+        ibd_results_list = []
         for chromo in ['1', '2', '15', '22']:
             vcf_path = TEST_DATA_PATH + '1kgp_vcf/' + chromo + '.vcf'
             map_path = TEST_DATA_PATH + '1kgp_vcf/' + chromo + '.map'
             haplotypes = ibd.VcfHaplotypeAlignment(vcf_path, map_path)
             tpbwt = ibd.TPBWTAnalysis()
             ibd_segs = tpbwt.compute_ibd(haplotypes, L_f=4.0, use_phase_correction=False, verbose=False)
-            ibd_results = ibd_results.append(ibd_segs)
+            ibd_results_list.append(ibd_segs)
+        ibd_results = pd.concat(ibd_results_list, ignore_index=True)
 
         # we expect 2 IBD segments > 4 cM
         self.assertTrue(ibd_results.shape[0] == 2)
@@ -119,14 +121,15 @@ class TestPbwtBasics(unittest.TestCase):
     def test_1kgp_compress(self):
         print("\nTesting 1KGP in-sample IBD compute: comparing results from TPBWT-compressed samples and VCF samples...")
         tpbwt = ibd.TPBWTAnalysis()
-        uncompressed_ibd_results = pd.DataFrame()
+        uncompressed_ibd_results_list = []
         for chromo in ['1', '2', '15', '22']:
             vcf_path = TEST_DATA_PATH + '1kgp_vcf/' + chromo + '.vcf'
             map_path = TEST_DATA_PATH + '1kgp_vcf/' + chromo + '.map'
             haplotypes = ibd.VcfHaplotypeAlignment(vcf_path, map_path)
             tpbwt.compress_alignment('compressed_haplotypes_1kgp/', haplotypes, verbose=False)
             ibd_segs = tpbwt.compute_ibd(haplotypes, L_f=4.0, verbose=False)
-            uncompressed_ibd_results = uncompressed_ibd_results.append(ibd_segs)
+            uncompressed_ibd_results_list.append(ibd_segs)
+        uncompressed_ibd_results = pd.concat(uncompressed_ibd_results_list, ignore_index=True)
         haplotypes_compressed_1kgp = ibd.CompressedHaplotypeAlignment('compressed_haplotypes_1kgp/')
         compressed_ibd_results = tpbwt.compute_ibd(haplotypes_compressed_1kgp, L_f=4.0, verbose=False)
         # we expect 2 IBD segments > 4 cM

@@ -1,7 +1,10 @@
 
 all:
-	pip install cython --user
+	pip install cython
 	python setup.py build_ext --inplace
+
+install:
+	pip install -e .
 
 test:
 	python tests/unit_tests.py
@@ -18,4 +21,4 @@ clean::
 	@rm -rf distribute-* *.egg *.egg-info *.tar.gz cover junit.xml coverage.xml .cache
 	@rm -rf compressed_haplotypes_1kgp
 
-.PHONY: clean test
+.PHONY: clean test install all

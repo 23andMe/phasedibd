@@ -2,7 +2,7 @@ from libc.stdint cimport uint8_t, uint32_t
 from libc.stdio cimport *
 from libc.stdlib cimport *
 from libc.string cimport *
-from haplotype_alignment cimport HaplotypeAlignment
+from phasedibd.haplotype_alignment cimport HaplotypeAlignment
 
 
 cdef class VcfHaplotypeAlignment(HaplotypeAlignment):

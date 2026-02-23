@@ -2,5 +2,8 @@
 requires = [            
     "Cython",
     "setuptools>=40.8.0",
+    "setuptools-scm",
     "numpy"
 ]
+
+[tool.setuptools_scm]

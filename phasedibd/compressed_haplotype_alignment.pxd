@@ -1,6 +1,6 @@
 from libc.stdint cimport uint8_t, uint16_t, uint32_t
 from libc.stdio cimport *
-from haplotype_alignment cimport HaplotypeAlignment
+from phasedibd.haplotype_alignment cimport HaplotypeAlignment
 
 
 cdef class CompressedHaplotypeAlignment(HaplotypeAlignment):
@@ -21,6 +21,8 @@ cdef class CompressedHaplotypeAlignment(HaplotypeAlignment):
     cdef uint32_t get_physical_position_from_site(self, long site)
     cdef get_chromosomes(self)
     cdef get_haplotype_sex(self, long haplotype_index)
+    cdef uint32_t get_num_all_haplotypes(self)
+    cdef uint32_t get_num_active_haplotypes(self)
     cdef uint32_t get_num_sites(self, chromosome=?)
     cdef long get_haplotype_index(self, long haplotype_name)
     cdef long get_haplotype_name(self, long haplotype_index)

@@ -12,11 +12,17 @@ with open('LICENSE.txt', 'r') as f:
 name = 'phasedibd'
 description = 'Python package for computing the templated positional Burrows-Wheeler transform (TPBWT) used to estimate identity-by-descent.'
 
+extensions = [
+    Extension('phasedibd.haplotype_alignment', ['phasedibd/haplotype_alignment.pyx'], include_dirs=[np.get_include()]),
+    Extension('phasedibd.compressed_haplotype_alignment', ['phasedibd/compressed_haplotype_alignment.pyx'], include_dirs=[np.get_include()]),
+    Extension('phasedibd.vcf_haplotype_alignment', ['phasedibd/vcf_haplotype_alignment.pyx'], include_dirs=[np.get_include()]),
+    Extension('phasedibd.templated_pbwt_analysis', ['phasedibd/templated_pbwt_analysis.pyx'], include_dirs=[np.get_include()]),
+]
+
 setup(
     name=name,
     use_scm_version=True,
     install_requires=['Cython', 'pandas', 'numpy'],
-    setup_requires=['Cython', 'setuptools-scm'],
     author='23andMe Research',
     author_email='willfreyman@gmail.com',
     description=description,
@@ -26,6 +32,6 @@ setup(
     packages=[name],
     include_package_data=True,
     url='https://github.com/23andme/' + name,
-    ext_modules=cythonize([Extension('phasedibd.*', ['phasedibd/*.pyx'], include_dirs=[np.get_include()])]),
+    ext_modules=cythonize(extensions, include_path=['phasedibd']),
     include_dirs=[np.get_include()]
 )

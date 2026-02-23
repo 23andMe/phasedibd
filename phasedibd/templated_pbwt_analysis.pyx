@@ -1,4 +1,5 @@
 # cython: profile=True
+# distutils: define_macros=NPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION
 import itertools
 import math
 import numpy as np
@@ -90,7 +91,7 @@ cdef class TPBWT:
         free(self.segments_end_bp)
         cdef uint32_t num_cols
         if self.current_matches_start != NULL:
-            num_cols = sizeof(self.current_matches_start)/sizeof(self.current_matches_start[0])
+            num_cols = <uint32_t>(sizeof(self.current_matches_start)/sizeof(self.current_matches_start[0]))
             for i in xrange(num_cols):
                 free(self.current_matches_start[i])
                 free(self.current_matches_end[i])
@@ -162,7 +163,7 @@ cdef class TPBWT:
 
         # first free any already allocated memory
         if self.current_matches_start != NULL:
-            num_rows = sizeof(self.current_matches_start)/sizeof(self.current_matches_start[0])
+            num_rows = <uint32_t>(sizeof(self.current_matches_start)/sizeof(self.current_matches_start[0]))
             for i in xrange(num_rows):
                 free(self.current_matches_start[i])
                 free(self.current_matches_end[i])
